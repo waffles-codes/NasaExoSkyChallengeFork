@@ -3,3 +3,8 @@
     padding: 0;
     box-sizing: border-box; /* Optional: this makes box sizing more predictable */
 }
+
+.user-input {
+    position: relative;
+
+}
