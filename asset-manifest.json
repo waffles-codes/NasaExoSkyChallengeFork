@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/NasaExoSkyChallenge/static/css/main.c7ec3132.css",
+    "main.js": "/NasaExoSkyChallenge/static/js/main.2736e3be.js",
+    "index.html": "/NasaExoSkyChallenge/index.html",
+    "main.c7ec3132.css.map": "/NasaExoSkyChallenge/static/css/main.c7ec3132.css.map",
+    "main.2736e3be.js.map": "/NasaExoSkyChallenge/static/js/main.2736e3be.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.c7ec3132.css",
+    "static/js/main.2736e3be.js"
+  ]
+}
