@@ -1,0 +1,1 @@
+{"version":3,"file":"static/css/main.736cf5a1.css","mappings":"AAAA,EAGI,qBAAsB,CAFtB,QAAS,CACT,SAEJ,CAEA,YACI,iBAEJ","sources":["styles.css"],"sourcesContent":["* {\n    margin: 0;\n    padding: 0;\n    box-sizing: border-box; /* Optional: this makes box sizing more predictable */\n}\n\n.user-input {\n    position: relative;\n\n}"],"names":[],"sourceRoot":""}
