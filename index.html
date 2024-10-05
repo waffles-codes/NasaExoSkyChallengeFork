@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ExoSky Start</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!-- Intial Aladin Lite viewer where user choose coordinates or random -->
+    <div id="aladin-lite-div" style="width:100vw ;height:100vh;"></div>
+    <script type="text/javascript" src="https://aladin.cds.unistra.fr/AladinLite/api/v3/latest/aladin.js" charset="utf-8"></script>
+    <script type="text/javascript">
+        let aladin;
+        A.init.then(() => {
+            aladin = A.aladin('#aladin-lite-div', {survey: "P/DSS2/color", fov:60, target: "Trifid Nebula"});
+        });
+    </script>
+</body>
+</html>
