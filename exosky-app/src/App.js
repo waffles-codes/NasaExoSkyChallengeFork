@@ -102,4 +102,3 @@ const AladinViewer = () => {
 }
 
 export default AladinViewer;
-
