@@ -7,6 +7,8 @@ from scipy.stats import linregress
 
 import requests
 
+from skyfield.api import Star
+
 # Query Gaia data
 ra_center = 280
 dec_center = -60
@@ -136,7 +138,9 @@ for i in range(len(r['ra'])):
     APIcords.append(temp)
 
 
+barnard = Star(ra_hours=(APIcords[0][0]), dec_degrees=(APIcords[0][1]))
 
+print(barnard)
 
 
 
