@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import StarMap from '../components/StarMap.jsx';
+import ExoSkyCanvas from "../components/ExoSkyCanvas";
 
 const ExoSkyPage = () => {
     const navigate = useNavigate();
@@ -14,7 +15,7 @@ const ExoSkyPage = () => {
     };
 
     return (
-        <div className='container'>
+        <div>
             <h1>Exosky Page</h1>
 
             {/* Back button */}
