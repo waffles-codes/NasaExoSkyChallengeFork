@@ -147,12 +147,17 @@ for i in range(len(r['ra'])):
 
 def find_closest_star(df, ra_target, dec_target):
 
+
     # Calculate the Euclidean distance
     df['distance'] = np.sqrt((df['ra_degrees'] - ra_target)**2 + (df['dec_degrees'] - dec_target)**2)
     
-    closest_row = df.loc[df['distance'].idxmin()]
+    # Get the index of the row with the minimum distance
+    closest_index = df['distance'].idxmin()
     
-    return closest_row
+    # Get the row with the minimum distance
+    closest_row = df.loc[closest_index]
+    
+    return closest_row, closest_index
 
 
 
@@ -168,6 +173,14 @@ pd.set_option('display.max_rows', 5)
 # displaying the DataFrame
 display(df)
 
-closest_star = find_closest_star(df, APIcords[0][0], APIcords[0][1])
+closest_star_data, closest_star_number= find_closest_star(df, APIcords[0][0], APIcords[0][1])
 
-print(closest_star)
+#print(closest_star)
+
+
+#GETS THE Hipparcos designation of the star basically a name but not the actual name
+print(closest_star_number)
+
+barnards_star = Star.from_dataframe(df.loc[closest_star_number])
+
+print(barnards_star)
