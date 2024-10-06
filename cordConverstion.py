@@ -129,17 +129,14 @@ APIcords = []
 
 for i in range(len(r['ra'])):
     #right assection, decinlation, and distance
-    ra_orig, dec_orig, distance_orig = transform_coordinates(ra_to_hms(r['ra'][i]), r['dec'][i], r['dist'][i], delta_ra, delta_dec)
+    ra_orig, dec_orig, distance_orig = transform_coordinates(r['ra'][i], r['dec'][i], r['dist'][i], delta_ra, delta_dec)
+    ra_orig = ra_to_hms(ra_orig)
+    dec_orig = dec_to_dms(dec_orig)
     temp = [ra_orig, dec_orig, distance_orig]
     APIcords.append(temp)
 
 
-print(f"Original Frame Coordinates:")
-print(APIcords[1])
 
-final_ra = APIcords[0][0]
-final_dec = APIcords[0][1]
-final_dist= APIcords[0][2]
 
 
 
