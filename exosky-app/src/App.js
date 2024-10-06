@@ -7,7 +7,7 @@ const App = () => {
     return (
         <Routes>
             <Route path="/" element={<AladinLoader />} />
-            <Route path="/#/exosky" element={<ExoSkyPage />} />
+            <Route path="/exosky" element={<ExoSkyPage />} />
         </Routes>
     );
 }
