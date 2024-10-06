@@ -1,10 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
-import CoordsButton from './getCoords'; // Adjust the path if needed
+import CoordsButton from './getCoords';
+import { useLocation } from 'react-router-dom';
 
 const AladinLoader = () => {
     const aladinRef = useRef(null); // Reference to the Aladin Lite div
-    const [aladinInstance, setAladinInstance] = useState(null); // Track the Aladin instance
-
+    const [aladinInstance, setAladinInstance] = useState(null); // Track the Aladin instance, kind of like an API key.
+                                                                            // needed to avoid prop reference breaking when sending to
+                                                                            // getCoords.
+    const location = useLocation();
 
     useEffect(() => {
         const initializeAladin = () => {
@@ -16,13 +19,18 @@ const AladinLoader = () => {
                     target: 'andromeda galaxy'
                 });
                 setAladinInstance(window.aladin);
+
+                // If RA/Dec values are passed, go to those coordinates
+                if (location.state && location.state.ra && location.state.dec) {
+                    window.aladin.gotoRaDec(location.state.ra, location.state.dec);
+                }
             }
         };
 
         // Start the initialization process
         initializeAladin();
 
-    },[]); // Only run once on mount
+    }, [location.state]); // Re-run if location.state changes
 
 
     return (
