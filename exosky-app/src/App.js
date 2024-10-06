@@ -1,11 +1,14 @@
 import React from 'react';
+import { Route, Routes } from 'react-router-dom'; // Remove Router import
 import AladinLoader from './components/AladinLoader';
+import ExoSkyPage from './routes/ExoSkyPage';
 
 const App = () => {
     return (
-        <div>
-            <AladinLoader /> {/* Render the Aladin viewer from AladinLoader.jsx in components*/}
-        </div>
+        <Routes>
+            <Route path="/" element={<AladinLoader />} />
+            <Route path="/#/exosky" element={<ExoSkyPage />} />
+        </Routes>
     );
 }
 

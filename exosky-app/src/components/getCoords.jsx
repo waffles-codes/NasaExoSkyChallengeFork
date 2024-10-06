@@ -14,7 +14,7 @@ const CoordsButton = ({ aladin }) => {
 
     return (
         <div style={{ position: 'fixed', top: '4vh', left: '15vw' }}>
-            <button onClick={onClick}>Get coords</button>
+            <button onClick={onClick}>Get Exosky</button>
         </div>
     );
 };
