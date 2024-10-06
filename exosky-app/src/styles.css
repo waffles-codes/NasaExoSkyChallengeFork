@@ -7,3 +7,7 @@
 .user-input {
     position: relative;
 }
+
+body {
+    background-color: rgb(194, 194, 194);
+}
