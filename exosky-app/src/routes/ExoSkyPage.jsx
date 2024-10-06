@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import ExoSkyCanvas from "../components/ExoSkyCanvas";
 
 const ExoSkyPage = () => {
     const navigate = useNavigate();
@@ -14,7 +15,7 @@ const ExoSkyPage = () => {
 
     return (
         <div>
-            <h1>Exosky Page</h1>
+            <ExoSkyCanvas />
 
             {/* Back button */}
             <button onClick={handleBackClick} style={{ position: 'fixed', top: '4vh', left: '15vw' }}>
