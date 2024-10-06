@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/NasaExoSkyChallenge/static/css/main.736cf5a1.css",
-    "main.js": "/NasaExoSkyChallenge/static/js/main.4cf32e0c.js",
+    "main.js": "/NasaExoSkyChallenge/static/js/main.2a85cea4.js",
     "index.html": "/NasaExoSkyChallenge/index.html",
     "main.736cf5a1.css.map": "/NasaExoSkyChallenge/static/css/main.736cf5a1.css.map",
-    "main.4cf32e0c.js.map": "/NasaExoSkyChallenge/static/js/main.4cf32e0c.js.map"
+    "main.2a85cea4.js.map": "/NasaExoSkyChallenge/static/js/main.2a85cea4.js.map"
   },
   "entrypoints": [
     "static/css/main.736cf5a1.css",
-    "static/js/main.4cf32e0c.js"
+    "static/js/main.2a85cea4.js"
   ]
 }
