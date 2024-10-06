@@ -5,6 +5,7 @@ from astropy.time import Time
 import astropy.units as u
 from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
+from scipy.stats import linregress
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 app = Flask(__name__) #create a flask app
@@ -13,6 +14,7 @@ CORS(app)
 
 Gaia.ROW_LIMIT = 1000
 Gaia.MAIN_GAIA_TABLE = "gaiadr3.gaia_source"  # Reselect Data Release 3, default
+
 
 def fetch_star_data(inp_ra, inp_dec):
     # Right ascension (RA) (basically east to west on sphere) and 
@@ -57,12 +59,39 @@ def fetch_star_data(inp_ra, inp_dec):
 
     azimuth_rad = np.radians(r['azimuth'])
     altitude_rad = np.radians(r['altitude'])
-    dist = r['distance_gspphot'] #add distances to scale with actual distance
-    x = dist * np.cos(altitude_rad) * np.sin(azimuth_rad)
-    y = dist * np.cos(altitude_rad) * np.cos(azimuth_rad)
-    z = dist * np.sin(altitude_rad)
+    distance = r['distance_gspphot'] #add distances to scale with actual distance
+    # Convert spherical coordinates to Cartesian coordinates
+    x = distance * np.cos(altitude_rad) * np.cos(azimuth_rad)
+    y = distance * np.cos(altitude_rad) * np.sin(azimuth_rad)
+    z = distance * np.sin(altitude_rad)
 
-    return np.column_stack((x, y, z))
+    # Perform linear regression to find the line of best fit in the xy plane
+    slope, intercept, _, _, _ = linregress(x, y)
+
+    # Calculate the direction vector of the line of best fit (Tangent vector)
+    tangent_vector = np.array([1, slope, 0])
+    tangent_vector /= np.linalg.norm(tangent_vector)
+
+    # Calculate the normal vector to the line of best fit
+    normal_vector = np.cross(tangent_vector, np.array([0, 0, 1]))
+    normal_vector /= np.linalg.norm(normal_vector)
+
+    # Calculate the binormal vector
+    binormal_vector = np.cross(tangent_vector, normal_vector)
+    binormal_vector /= np.linalg.norm(binormal_vector)
+
+    # Create the transformation matrix from XYZ to TNB
+    transformation_matrix = np.vstack((tangent_vector, normal_vector, binormal_vector)).T
+
+    # Transform the points into the TNB coordinate system
+    transformed_points = np.dot(transformation_matrix, np.vstack((x, y, z)))
+
+    # Extract the transformed coordinates
+    t_transformed = transformed_points[0, :]
+    n_transformed = transformed_points[1, :]
+    b_transformed = transformed_points[2, :]
+
+    return np.column_stack((t_transformed, n_transformed, b_transformed))
 
 def project_to_2d(xyz):
     # Simple perspective projection
