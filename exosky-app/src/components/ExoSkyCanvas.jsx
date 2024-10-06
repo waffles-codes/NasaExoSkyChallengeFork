@@ -59,8 +59,6 @@ const ExoSkyCanvas = () => {
 
                 fabricCanvas.current.add(circle); // Add the circle to the canvas
             }
-
-            fabricCanvas.current.renderAll(); // Refresh the canvas to show the new circle
         };
 
 
@@ -82,6 +80,24 @@ const ExoSkyCanvas = () => {
             fabricCanvas.current.dispose(); // Dispose of the canvas instance
         };
     }, []); // Run only once when the component mounts
+
+    // Function to export the canvas as a PNG
+    const exportCanvas = () => {
+        const dataURL = fabricCanvas.current.toDataURL({
+            format: 'png',
+            quality: 1.0 // Set quality (1.0 = best quality)
+        });
+
+        // Create a link element
+        const link = document.createElement('a');
+        link.href = dataURL;
+        link.download = 'exosky_canvas.png'; // Set a default file name
+
+        // Trigger the download
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
 
     return (
         <div>
@@ -109,6 +125,7 @@ const ExoSkyCanvas = () => {
                         onChange={(e) => setBrushSize(e.target.value)}
                     />
                 </div>
+                <button onClick={exportCanvas}>Export as PNG</button>
             </div>
             <canvas ref={canvasRef} style={{border: '1px solid black', width: '100%', height: '100%'}}/>
         </div>

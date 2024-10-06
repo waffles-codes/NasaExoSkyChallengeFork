@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import StarMap from '../components/StarMap.jsx';
 import ExoSkyCanvas from "../components/ExoSkyCanvas";
 
 const ExoSkyPage = () => {
@@ -15,12 +16,13 @@ const ExoSkyPage = () => {
 
     return (
         <div>
-            <ExoSkyCanvas />
+            <h1>Exosky Page</h1>
 
             {/* Back button */}
-            <button onClick={handleBackClick} style={{ position: 'fixed', top: '4vh', left: '15vw' }}>
+            <button onClick={handleBackClick} style={{ position: 'fixed', top: '0vh', left: '15vw' }}>
                 Back
             </button>
+            <StarMap/>
         </div>
     );
 };

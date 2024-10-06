@@ -7,7 +7,8 @@ from scipy.stats import linregress
 
 import requests
 
-from skyfield.api import Star
+from skyfield.api import Star, load
+from skyfield.data import hipparcos
 
 # Query Gaia data
 ra_center = 280
@@ -132,15 +133,54 @@ APIcords = []
 for i in range(len(r['ra'])):
     #right assection, decinlation, and distance
     ra_orig, dec_orig, distance_orig = transform_coordinates(r['ra'][i], r['dec'][i], r['dist'][i], delta_ra, delta_dec)
-    ra_orig = ra_to_hms(ra_orig)
-    dec_orig = dec_to_dms(dec_orig)
+
+    #UNCOMMENT FOR HMS AND DMS FORMAT
+
+    #ra_orig = ra_to_hms(ra_orig)
+    #dec_orig = dec_to_dms(dec_orig)
+
     temp = [ra_orig, dec_orig, distance_orig]
     APIcords.append(temp)
 
 
-barnard = Star(ra_hours=(APIcords[0][0]), dec_degrees=(APIcords[0][1]))
+#barnard = Star(ra_hours=(APIcords[0][0]), dec_degrees=(APIcords[0][1]))
 
-print(barnard)
+def find_closest_star(df, ra_target, dec_target):
+
+
+    # Calculate the Euclidean distance
+    df['distance'] = np.sqrt((df['ra_degrees'] - ra_target)**2 + (df['dec_degrees'] - dec_target)**2)
+    
+    # Get the index of the row with the minimum distance
+    closest_index = df['distance'].idxmin()
+    
+    # Get the row with the minimum distance
+    closest_row = df.loc[closest_index]
+    
+    return closest_row, closest_index
 
 
 
+with load.open(hipparcos.URL) as f:
+    df = hipparcos.load_dataframe(f)
+
+# importing the modules
+from IPython.display import display
+import pandas as pd
+
+
+pd.set_option('display.max_rows', 5)
+# displaying the DataFrame
+display(df)
+
+closest_star_data, closest_star_number= find_closest_star(df, APIcords[0][0], APIcords[0][1])
+
+#print(closest_star)
+
+
+#GETS THE Hipparcos designation of the star basically a name but not the actual name
+print(closest_star_number)
+
+barnards_star = Star.from_dataframe(df.loc[closest_star_number])
+
+print(barnards_star)

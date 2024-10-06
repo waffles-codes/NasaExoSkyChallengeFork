@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Route, Routes } from 'react-router-dom'; // Remove Router import
 import AladinLoader from './components/AladinLoader';
 import ExoSkyPage from './routes/ExoSkyPage';
