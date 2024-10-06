@@ -81,6 +81,40 @@ def transform_coordinates(ra, dec, distance, delta_ra, delta_dec):
     return cartesian_to_spherical(*original_cartesian)
 
 
+def ra_to_hms(ra_deg):
+    """
+    Convert Right Ascension from degrees to the format hh:mm:ss.s.
+    """
+    # Convert RA from degrees to hours (1 hour = 15 degrees)
+    ra_hours = ra_deg / 15.0
+
+    hours = int(ra_hours)
+    minutes = int((ra_hours - hours) * 60)
+    seconds = (ra_hours - hours - minutes / 60) * 3600
+
+    return [hours, minutes, seconds]
+
+def dec_to_dms(dec_deg):
+    """
+    Convert Declination from degrees to the format ±dd°mm'ss.s".
+    """
+    # Get the sign for declination (positive or negative)
+    
+    
+    # Work with the absolute value for conversion
+    dec_deg = abs(dec_deg)
+
+    degrees = int(dec_deg)
+    if dec_deg <= 0:
+        degrees = degrees*-1
+    minutes = int((dec_deg - degrees) * 60)
+    
+        
+    seconds = (dec_deg - degrees - minutes / 60) * 3600
+
+    return [degrees, minutes, seconds]
+
+
 
 ra_new = 45.0  # in degrees
 dec_new = 30.0  # in degrees
@@ -95,7 +129,7 @@ APIcords = []
 
 for i in range(len(r['ra'])):
     #right assection, decinlation, and distance
-    ra_orig, dec_orig, distance_orig = transform_coordinates(r['ra'][i], r['dec'][i], r['dist'][i], delta_ra, delta_dec)
+    ra_orig, dec_orig, distance_orig = transform_coordinates(ra_to_hms(r['ra'][i]), r['dec'][i], r['dist'][i], delta_ra, delta_dec)
     temp = [ra_orig, dec_orig, distance_orig]
     APIcords.append(temp)
 
@@ -107,32 +141,5 @@ final_ra = APIcords[0][0]
 final_dec = APIcords[0][1]
 final_dist= APIcords[0][2]
 
-def ra_to_hms(ra_deg):
-    """
-    Convert Right Ascension from degrees to the format hh:mm:ss.s.
-    """
-    # Convert RA from degrees to hours (1 hour = 15 degrees)
-    ra_hours = ra_deg / 15.0
 
-    hours = int(ra_hours)
-    minutes = int((ra_hours - hours) * 60)
-    seconds = (ra_hours - hours - minutes / 60) * 3600
-
-    return f"{hours:02d}h {minutes:02d}m {seconds:05.2f}s"
-
-def dec_to_dms(dec_deg):
-    """
-    Convert Declination from degrees to the format ±dd°mm'ss.s".
-    """
-    # Get the sign for declination (positive or negative)
-    sign = "+" if dec_deg >= 0 else "-"
-    
-    # Work with the absolute value for conversion
-    dec_deg = abs(dec_deg)
-
-    degrees = int(dec_deg)
-    minutes = int((dec_deg - degrees) * 60)
-    seconds = (dec_deg - degrees - minutes / 60) * 3600
-
-    return f"{sign}{degrees:02d}° {minutes:02d}' {seconds:04.1f}\""
 
