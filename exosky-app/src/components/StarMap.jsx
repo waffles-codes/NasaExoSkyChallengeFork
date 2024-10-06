@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 
 function StarMap() {
   const [coords, setCoords] = useState([]);
@@ -6,10 +7,14 @@ function StarMap() {
   const [dec, setDec] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const location = useLocation();
 
   const fetchCoords = () => {
     setIsLoading(true);
     setError(null);
+
+    var { ra, dec } = location.state || { ra: 0, dec: 0 };
+
     fetch(`http://localhost:5000/api/get_coords?inp_ra=${ra}&inp_dec=${dec}`)
       .then(response => {
         if (!response.ok) {
@@ -40,7 +45,7 @@ function StarMap() {
           RA:
           <input
             type="number"
-            value={ra}
+            value={location.state.ra}
             onChange={(e) => setRa(parseFloat(e.target.value))}
           />
         </label>
@@ -48,7 +53,7 @@ function StarMap() {
           Dec:
           <input
             type="number"
-            value={dec}
+            value={location.state.dec}
             onChange={(e) => setDec(parseFloat(e.target.value))}
           />
         </label>

@@ -10,7 +10,6 @@ const CoordsButton = ({ aladin }) => {
             [raValue, decValue] = aladin.getRaDec();
             console.log("RA:", raValue);
             console.log("Dec:", decValue);
-
         } else {
             console.log("Aladin instance is not available.");
         }
