@@ -64,18 +64,6 @@ function StarMap() {
       {isLoading && <p>Loading...</p>}
       {error && <p>Error: {error}</p>}
 
-      {/* <svg width="500" height="500" viewBox="-10 -10 20 20">
-        {coords.map((coord, index) => (
-          <circle
-            key={index}
-            cx={coord.x}
-            cy={coord.y}
-            r="0.1"
-            fill="white"
-          />
-        ))}
-      </svg> */}
-
       <Plot
         data={[
           {

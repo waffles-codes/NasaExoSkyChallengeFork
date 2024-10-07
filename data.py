@@ -21,7 +21,7 @@ def fetch_star_data(inp_ra, inp_dec):
     coord = SkyCoord(ra=inp_ra, dec=inp_dec, unit=(u.degree, u.degree))
     width = u.Quantity(1.6, u.deg)
     height = u.Quantity(0.9, u.deg)
-    columns = ["ra", "dec", "distance_gspphot"]
+    columns = ["ra", "dec", "distance_gspphot", "teff_gspphot"]
     # this returns a bunch of celestial coordinates in ascending order of angular distance
     r = Gaia.query_object_async(coordinate=coord, width=width, height=height, columns=columns)
 
@@ -72,6 +72,30 @@ def gnomonic_projection(x, y, z, ra0, dec0):
 
     return x_proj, y_proj
 
+def map_teff_to_star_color(teff_gspphot):
+        """
+        Map stellar temperature (Teff) to a color based on astronomical star types.
+
+        Parameters:
+        teff_gspphot (array-like): Array of effective temperatures (Teff).
+
+        Returns:
+        star_colors (list): List of colors corresponding to the temperatures.
+        """
+        star_colors = []
+        for teff in teff_gspphot:
+            if teff > 10000:  # Blue
+                star_colors.append('blue')
+            elif 7500 < teff <= 10000:  # White
+                star_colors.append('white')
+            elif 5000 < teff <= 7500:  # Yellow
+                star_colors.append('yellow')
+            elif 3500 < teff <= 5000:  # Orange
+                star_colors.append('orange')
+            else:  # Red stars (coolest)
+                star_colors.append('red')
+        return star_colors
+
 @app.route('/api/get_coords', methods=['GET'])
 def get_coords():
     inp_ra = request.args.get('inp_ra', default=None, type=float)
@@ -79,14 +103,16 @@ def get_coords():
     if inp_ra is None or inp_dec is None:
         return jsonify({"error": "Both inp_ra and inp_dec are required"}), 400
 
-    coordinates = fetch_star_data(inp_ra, inp_dec)
-    coordinates = np.array(coordinates)
-    x_coords = coordinates[:, 0]
-    y_coords = coordinates[:, 1]
-    z_coords = coordinates[:, 2]
+    data = fetch_star_data(inp_ra, inp_dec)
+    data = np.array(data)
+    x_coords = data[:, 0]
+    y_coords = data[:, 1]
+    z_coords = data[:, 2]
+    color = data[:, 3]
+    color = map_teff_to_star_color(color)
     x_proj, y_proj = gnomonic_projection(x_coords, y_coords, z_coords, inp_ra, inp_dec)
-    coords = [{'x': float(x), 'y': float(y)} for x, y in zip(x_proj, y_proj)]
-    return jsonify(coords)
+    coordsncolor = [{'x': float(x), 'y': float(y), 'color': str(color)} for x, y, color in zip(x_proj, y_proj, color)]
+    return jsonify(coordsncolor)
 
 if __name__ == '__main__':
     app.run(port=5000)
