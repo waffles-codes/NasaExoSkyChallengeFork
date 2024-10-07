@@ -13,5 +13,5 @@ In one terminal:
 run  `python data.py` 
 
 After that, in other terminal:
-run `cd exosky-app
-npm start`
+run `cd exosky-app`
+`npm start`
