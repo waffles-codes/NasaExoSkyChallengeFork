@@ -31,6 +31,7 @@ def fetch_star_data(inp_ra, inp_dec):
     non_empty_columns = [col for col in filtered_r.colnames if not all(filtered_r[col].mask)]
     r = filtered_r[non_empty_columns]
 
+    # currently IT ONLY SHOWS THE PROJECTION FROM EARTH WHAT THE F*** WHO ADDED THIS (it was me, i added this)
     planet_location = EarthLocation(lat=45*u.deg, lon=120*u.deg, height=0*u.m)
     azimuths = []
     altitudes = []
