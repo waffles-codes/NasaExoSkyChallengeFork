@@ -1,1 +1,0 @@
-{"version":3,"file":"static/css/main.440c9545.css","mappings":"AAAA,EAGI,qBAAsB,CAFtB,QAAS,CACT,SAEJ,CAEA,KACI,wBACJ","sources":["styles.css"],"sourcesContent":["* {\n    margin: 0;\n    padding: 0;\n    box-sizing: border-box; /* Optional: this makes box sizing more predictable */\n}\n\nbody {\n    background-color: rgb(194, 194, 194);\n}"],"names":[],"sourceRoot":""}
