@@ -30,7 +30,7 @@ def fetch_star_data(inp_ra, inp_dec):
 
     #GET THIS TO ACTUALLY GIVE US GOOD DATA PLEASE WEHHHHHHHHHHH
     # job = Gaia.cone_search_async(coord, radius=0.5*u.deg)
-    job = Gaia.launch_job_async("select top 1000 ra, dec, distance_gspphot "
+    job = Gaia.launch_job_async("select top 2000 ra, dec, distance_gspphot "
                                 "from gaiadr3.gaia_source_lite order by source_id",
                                 dump_to_file=False, output_format='csv')
     r = job.get_data()
@@ -99,8 +99,8 @@ def fetch_star_data(inp_ra, inp_dec):
 def project_to_2d(xyz):
     # Simple perspective projection
     z_values = xyz[:, 2] + 1e-10
-    x_2d = np.divide(xyz[:, 0], z_values, where=z_values!=0)
-    y_2d = np.divide(xyz[:, 1], z_values, where=z_values!=0)
+    x_2d = np.divide(xyz[:, 1], z_values, where=z_values!=0)
+    y_2d = np.divide(xyz[:, 0], z_values, where=z_values!=0)
     return np.column_stack((x_2d, y_2d))
 
 @app.route('/api/get_coords', methods=['GET'])
