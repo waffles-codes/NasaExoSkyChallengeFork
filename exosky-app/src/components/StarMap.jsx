@@ -88,13 +88,13 @@ function StarMap() {
         ]}
         layout={ { 
             width: 1400, height: 600, 
-            title: 'Plot in TNB',
+            title: 'Projections',
             titlefont: {
               color: 'white'
             },
             xaxis: {
               title: {
-                text: 'Tangential Vector'
+                text: 'X'
               },
               titlefont: {
                 color: 'white'
@@ -105,7 +105,7 @@ function StarMap() {
             },
             yaxis: {
               title: {
-                text: 'Normal Vector'
+                text: 'Y'
               },
               titlefont: {
                 color: 'white'
