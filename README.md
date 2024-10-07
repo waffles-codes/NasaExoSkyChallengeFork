@@ -2,7 +2,14 @@
 
 https://shyam-723.github.io/NasaExoSkyChallenge/
 
-Remember to npm install and to check pip dependenices! 
+Currently, you need to download the source code:
+In the terminal, first set up dependencies: 
+  Run npm install
+  Run pip install -r requirements.txt
 
-IMPORTANT:
-run npm start withing the exosky-app folder, doesn't work otherwise
+After this, open up two Terminals.
+In one terminal:
+run  `python data.py` (without quotes)
+
+After that, in other terminal:
+run `npm start` (without quotes)
