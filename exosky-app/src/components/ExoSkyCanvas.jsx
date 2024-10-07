@@ -85,13 +85,13 @@ const ExoSkyCanvas = () => {
     const exportCanvas = () => {
         const dataURL = fabricCanvas.current.toDataURL({
             format: 'png',
-            quality: 0.8
+            quality: 1.0 // Set quality (1.0 = best quality)
         });
 
         // Create a link element
         const link = document.createElement('a');
         link.href = dataURL;
-        link.download = 'exosky_canvas.png'; // Sefault file name
+        link.download = 'exosky_canvas.png'; // Set a default file name
 
         // Trigger the download
         document.body.appendChild(link);
