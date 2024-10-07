@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import Plot from 'react-plotly.js';
 
 function StarMap() {
   const [coords, setCoords] = useState([]);
@@ -59,9 +60,11 @@ function StarMap() {
         </label>
         <button onClick={fetchCoords}>Fetch Coordinates</button>
       </div>
+
       {isLoading && <p>Loading...</p>}
       {error && <p>Error: {error}</p>}
-      <svg width="500" height="500" viewBox="-10 -10 20 20">
+
+      {/* <svg width="500" height="500" viewBox="-10 -10 20 20">
         {coords.map((coord, index) => (
           <circle
             key={index}
@@ -71,7 +74,20 @@ function StarMap() {
             fill="white"
           />
         ))}
-      </svg>
+      </svg> */}
+
+      <Plot
+        data={[
+          {
+            x: coords.map(coord => coord.x),
+            y: coords.map(coord => coord.y),
+            mode: 'markers',
+            type: 'scatter',
+            marker: { color: 'black', size: 3 },
+          },
+        ]}
+        layout={ {width: 1200, height: 600, title: 'A Fancy Plot'} }
+      />
     </div>
   );
 }

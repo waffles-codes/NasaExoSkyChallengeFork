@@ -12,7 +12,7 @@ app = Flask(__name__) #create a flask app
 CORS(app)
 
 
-Gaia.ROW_LIMIT = 1000
+Gaia.ROW_LIMIT = 100
 Gaia.MAIN_GAIA_TABLE = "gaiadr3.gaia_source"  # Reselect Data Release 3, default
 
 
@@ -21,17 +21,20 @@ def fetch_star_data(inp_ra, inp_dec):
     # declination (Dec) (basically north south on a sphere)
     # are celestial coordinates that specify the position of an object in the sky.
     coord = SkyCoord(ra=inp_ra, dec=inp_dec, unit=(u.degree, u.degree))
-    width = u.Quantity(16, u.deg)
-    height = u.Quantity(9, u.deg)
+    # width = u.Quantity(16, u.deg)
+    # height = u.Quantity(9, u.deg)
     # # this returns a bunch of celestial coordinates in ascending order of distance
     # r = Gaia.query_object_async(coordinate=coord, width=width, height=height)
 
     # r.pprint(max_width=130)
 
+    #GET THIS TO ACTUALLY GIVE US GOOD DATA PLEASE WEHHHHHHHHHHH
+    # job = Gaia.cone_search_async(coord, radius=0.5*u.deg)
     job = Gaia.launch_job_async("select top 1000 ra, dec, distance_gspphot "
                                 "from gaiadr3.gaia_source_lite order by source_id",
                                 dump_to_file=False, output_format='csv')
     r = job.get_data()
+    # r.pprint()
 
     # this removes all rows that do not have a distance_gspphot entry
     i = 0
@@ -42,7 +45,7 @@ def fetch_star_data(inp_ra, inp_dec):
         i += 1
 
     r.remove_rows(remove_list)
-    r.pprint()
+    # r.pprint()
 
 
     planet_location = EarthLocation(lat=45*u.deg, lon=120*u.deg, height=0*u.m)
