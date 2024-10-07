@@ -4,10 +4,6 @@
     box-sizing: border-box; /* Optional: this makes box sizing more predictable */
 }
 
-.user-input {
-    position: relative;
-}
-
 body {
     background-color: rgb(194, 194, 194);
 }

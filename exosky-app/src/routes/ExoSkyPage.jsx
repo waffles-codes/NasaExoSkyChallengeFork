@@ -16,10 +16,8 @@ const ExoSkyPage = () => {
 
     return (
         <div>
-            <h1>Exosky Page</h1>
-
             {/* Back button */}
-            <button onClick={handleBackClick} style={{ position: 'fixed', top: '1.5vh', left: '12.5vw' }}>
+            <button onClick={handleBackClick} style={{zIndex: 10}}>
                 Back
             </button>
             <StarMap/>
