@@ -83,7 +83,7 @@ function StarMap() {
             y: coords.map(coord => coord.y),
             mode: 'markers',
             type: 'scatter',
-            marker: { color: 'yellow', size: 3 },
+            marker: { color: coords.map(coord => coord.color), size: 3 },
           },
         ]}
         layout={ { 

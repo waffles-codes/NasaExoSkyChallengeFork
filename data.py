@@ -51,8 +51,9 @@ def fetch_star_data(inp_ra, inp_dec):
     x = distance * np.cos(altitude_rad) * np.cos(azimuth_rad)
     y = distance * np.cos(altitude_rad) * np.sin(azimuth_rad)
     z = distance * np.sin(altitude_rad)
+    color = r["teff_gspphot"]
 
-    return np.column_stack((x, y, z))
+    return np.column_stack((x, y, z, color))
 
 def gnomonic_projection(x, y, z, ra0, dec0):
     # Calculate spherical coordinates from Cartesian coordinates
