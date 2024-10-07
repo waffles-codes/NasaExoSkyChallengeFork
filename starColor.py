@@ -82,4 +82,4 @@ def fetch_star_data(inp_ra, inp_dec):
 
     starColor = np.array(r['star_colors'])
 
-    return np.column_stack((x, y, z), starColor)
+    return np.column_stack(x, y, z starColor)
