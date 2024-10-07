@@ -86,7 +86,20 @@ function StarMap() {
             marker: { color: 'black', size: 3 },
           },
         ]}
-        layout={ {width: 1200, height: 600, title: 'A Fancy Plot'} }
+        layout={ { 
+            width: 1400, height: 600, 
+            title: 'Plot in TNB',
+            xaxis: {
+              title: {
+                text: 'Tangential Vector'
+              }
+            },
+            yaxis: {
+              title: {
+                text: 'Normal Vector'
+              }
+            }
+          } }
       />
     </div>
   );
