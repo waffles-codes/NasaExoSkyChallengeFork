@@ -100,6 +100,7 @@ function StarMap() {
               }
             },
             plot_bgcolor: 'black',
+            paper_bgcolor: 'black',
           } }
       />
     </div>
