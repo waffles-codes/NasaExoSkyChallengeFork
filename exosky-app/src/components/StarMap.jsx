@@ -92,11 +92,17 @@ function StarMap() {
             xaxis: {
               title: {
                 text: 'Tangential Vector'
+              },
+              titlefont: {
+                color: 'white'
               }
             },
             yaxis: {
               title: {
                 text: 'Normal Vector'
+              },
+              titlefont: {
+                color: 'white'
               }
             },
             plot_bgcolor: 'black',
