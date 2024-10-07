@@ -83,7 +83,7 @@ function StarMap() {
             y: coords.map(coord => coord.y),
             mode: 'markers',
             type: 'scatter',
-            marker: { color: 'black', size: 3 },
+            marker: { color: 'yellow', size: 3 },
           },
         ]}
         layout={ { 
@@ -98,7 +98,8 @@ function StarMap() {
               title: {
                 text: 'Normal Vector'
               }
-            }
+            },
+            plot_bgcolor: 'black',
           } }
       />
     </div>
