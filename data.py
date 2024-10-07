@@ -3,9 +3,6 @@ from astropy.coordinates import SkyCoord, AltAz, EarthLocation
 from astroquery.gaia import Gaia
 from astropy.time import Time
 import astropy.units as u
-from mpl_toolkits.mplot3d import Axes3D
-import matplotlib.pyplot as plt
-from scipy.stats import linregress
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 app = Flask(__name__) #create a flask app
@@ -32,7 +29,11 @@ def fetch_star_data(inp_ra, inp_dec):
     r = filtered_r[non_empty_columns]
 
     # currently IT ONLY SHOWS THE PROJECTION FROM EARTH WHAT THE F*** WHO ADDED THIS (it was me, i added this)
-    planet_location = EarthLocation(lat=45*u.deg, lon=120*u.deg, height=0*u.m)
+    planet_location = EarthLocation(
+        lon=0* u.deg,
+        lat=0* u.deg,
+        height=0 * u.m
+    )
     azimuths = []
     altitudes = []
 

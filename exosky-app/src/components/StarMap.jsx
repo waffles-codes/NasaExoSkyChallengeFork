@@ -3,12 +3,12 @@ import { useLocation } from 'react-router-dom';
 import Plot from 'react-plotly.js';
 
 function StarMap() {
+  const location = useLocation();
   const [coords, setCoords] = useState([]);
-  const [ra, setRa] = useState(0);
-  const [dec, setDec] = useState(0);
+  const [ra, setRa] = useState(location.state?.ra || 0);
+  const [dec, setDec] = useState(location.state?.dec || 0);  
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
-  const location = useLocation();
 
   const fetchCoords = () => {
     setIsLoading(true);
@@ -40,13 +40,13 @@ function StarMap() {
 
   return (
     <div>
-      <h1>Projected Star Coordinates</h1>
+      {/* <h1>Projected Star Coordinates</h1> */}
       <div>
         <label>
           RA:
           <input
             type="number"
-            value={location.state.ra}
+            value={ra}
             onChange={(e) => setRa(parseFloat(e.target.value))}
           />
         </label>
@@ -54,7 +54,7 @@ function StarMap() {
           Dec:
           <input
             type="number"
-            value={location.state.dec}
+            value={dec}
             onChange={(e) => setDec(parseFloat(e.target.value))}
           />
         </label>
@@ -76,13 +76,13 @@ function StarMap() {
         ]}
         layout={ { 
             width: 1400, height: 600, 
-            title: 'Plot in TNB',
+            title: 'StarMap',
             titlefont: {
               color: 'white'
             },
             xaxis: {
               title: {
-                text: 'Tangential Vector'
+                text: 'X'
               },
               titlefont: {
                 color: 'white'
@@ -93,7 +93,7 @@ function StarMap() {
             },
             yaxis: {
               title: {
-                text: 'Normal Vector'
+                text: 'Y'
               },
               titlefont: {
                 color: 'white'
