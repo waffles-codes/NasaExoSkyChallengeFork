@@ -23,6 +23,7 @@ const ExoSkyPage = () => {
                 Back
             </button>
             <StarMap/>
+            <ExoSkyCanvas/>
         </div>
     );
 };
