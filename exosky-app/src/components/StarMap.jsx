@@ -99,12 +99,18 @@ function StarMap() {
               titlefont: {
                 color: 'white'
               },
+              tickfont: {
+                color: 'white'
+              },
             },
             yaxis: {
               title: {
                 text: 'Normal Vector'
               },
               titlefont: {
+                color: 'white'
+              },
+              tickfont: {
                 color: 'white'
               },
             },
