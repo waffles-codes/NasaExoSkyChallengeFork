@@ -11,42 +11,25 @@ from flask_cors import CORS
 app = Flask(__name__) #create a flask app
 CORS(app)
 
-
-Gaia.ROW_LIMIT = 100
-Gaia.MAIN_GAIA_TABLE = "gaiadr3.gaia_source"  # Reselect Data Release 3, default
-
-
 def fetch_star_data(inp_ra, inp_dec):
+    Gaia.MAIN_GAIA_TABLE = "gaiadr3.gaia_source"  # Reselect Data Release 3, default
+    Gaia.ROW_LIMIT = 1000
+
     # Right ascension (RA) (basically east to west on sphere) and 
     # declination (Dec) (basically north south on a sphere)
     # are celestial coordinates that specify the position of an object in the sky.
     coord = SkyCoord(ra=inp_ra, dec=inp_dec, unit=(u.degree, u.degree))
-    # width = u.Quantity(16, u.deg)
-    # height = u.Quantity(9, u.deg)
-    # # this returns a bunch of celestial coordinates in ascending order of distance
-    # r = Gaia.query_object_async(coordinate=coord, width=width, height=height)
+    width = u.Quantity(1.6, u.deg)
+    height = u.Quantity(0.9, u.deg)
+    columns = ["ra", "dec", "distance_gspphot"]
+    # this returns a bunch of celestial coordinates in ascending order of angular distance
+    r = Gaia.query_object_async(coordinate=coord, width=width, height=height, columns=columns)
 
-    # r.pprint(max_width=130)
+    # this filters out all our rows without a distance
+    filtered_r = r[r['distance_gspphot'].mask == False]
 
-    #GET THIS TO ACTUALLY GIVE US GOOD DATA PLEASE WEHHHHHHHHHHH
-    # job = Gaia.cone_search_async(coord, radius=0.5*u.deg)
-    job = Gaia.launch_job_async("select top 2000 ra, dec, distance_gspphot "
-                                "from gaiadr3.gaia_source_lite order by source_id",
-                                dump_to_file=False, output_format='csv')
-    r = job.get_data()
-    # r.pprint()
-
-    # this removes all rows that do not have a distance_gspphot entry
-    i = 0
-    remove_list = []
-    for row in r:
-        if not row[2]:
-            remove_list.append(i)
-        i += 1
-
-    r.remove_rows(remove_list)
-    # r.pprint()
-
+    non_empty_columns = [col for col in filtered_r.colnames if not all(filtered_r[col].mask)]
+    r = filtered_r[non_empty_columns]
 
     planet_location = EarthLocation(lat=45*u.deg, lon=120*u.deg, height=0*u.m)
     azimuths = []
@@ -68,40 +51,24 @@ def fetch_star_data(inp_ra, inp_dec):
     y = distance * np.cos(altitude_rad) * np.sin(azimuth_rad)
     z = distance * np.sin(altitude_rad)
 
-    # Perform linear regression to find the line of best fit in the xy plane
-    slope, intercept, _, _, _ = linregress(x, y)
+    return np.column_stack((x, y, z))
 
-    # Calculate the direction vector of the line of best fit (Tangent vector)
-    tangent_vector = np.array([1, slope, 0])
-    tangent_vector /= np.linalg.norm(tangent_vector)
+def gnomonic_projection(x, y, z, ra0, dec0):
+    # Calculate spherical coordinates from Cartesian coordinates
+    r = np.sqrt(x**2 + y**2 + z**2)
+    ra = np.arctan2(y, x)  # Right Ascension
+    dec = np.arcsin(z / r)  # Declination
 
-    # Calculate the normal vector to the line of best fit
-    normal_vector = np.cross(tangent_vector, np.array([0, 0, 1]))
-    normal_vector /= np.linalg.norm(normal_vector)
+    # Convert center coordinates to radians
+    ra0 = np.radians(ra0)
+    dec0 = np.radians(dec0)
 
-    # Calculate the binormal vector
-    binormal_vector = np.cross(tangent_vector, normal_vector)
-    binormal_vector /= np.linalg.norm(binormal_vector)
+    # Gnomonic projection formulas
+    cos_c = np.sin(dec0) * np.sin(dec) + np.cos(dec0) * np.cos(dec) * np.cos(ra - ra0)
+    x_proj = np.cos(dec) * np.sin(ra - ra0) / cos_c
+    y_proj = (np.cos(dec0) * np.sin(dec) - np.sin(dec0) * np.cos(dec) * np.cos(ra - ra0)) / cos_c
 
-    # Create the transformation matrix from XYZ to TNB
-    transformation_matrix = np.vstack((tangent_vector, normal_vector, binormal_vector)).T
-
-    # Transform the points into the TNB coordinate system
-    transformed_points = np.dot(transformation_matrix, np.vstack((x, y, z)))
-
-    # Extract the transformed coordinates
-    t_transformed = transformed_points[0, :]
-    n_transformed = transformed_points[1, :]
-    b_transformed = transformed_points[2, :]
-
-    return np.column_stack((t_transformed, n_transformed, b_transformed))
-
-def project_to_2d(xyz):
-    # Simple perspective projection
-    z_values = xyz[:, 2] + 1e-10
-    x_2d = np.divide(xyz[:, 1], z_values, where=z_values!=0)
-    y_2d = np.divide(xyz[:, 0], z_values, where=z_values!=0)
-    return np.column_stack((x_2d, y_2d))
+    return x_proj, y_proj
 
 @app.route('/api/get_coords', methods=['GET'])
 def get_coords():
@@ -110,10 +77,13 @@ def get_coords():
     if inp_ra is None or inp_dec is None:
         return jsonify({"error": "Both inp_ra and inp_dec are required"}), 400
 
-    xyz = fetch_star_data(inp_ra, inp_dec)
-    xyz = np.array(xyz)
-    projection_2d = project_to_2d(xyz)
-    coords = [{'x': float(coord[0]), 'y': float(coord[1])} for coord in projection_2d]
+    coordinates = fetch_star_data(inp_ra, inp_dec)
+    coordinates = np.array(coordinates)
+    x_coords = coordinates[:, 0]
+    y_coords = coordinates[:, 1]
+    z_coords = coordinates[:, 2]
+    x_proj, y_proj = gnomonic_projection(x_coords, y_coords, z_coords, inp_ra, inp_dec)
+    coords = [{'x': float(x), 'y': float(y)} for x, y in zip(x_proj, y_proj)]
     return jsonify(coords)
 
 if __name__ == '__main__':
